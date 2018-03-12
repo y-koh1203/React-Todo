@@ -30,15 +30,23 @@ class ToDo extends React.Component{
         //コピー配列にstate:taskを追加
         listCopy.push(this.state.task);
         this.setState({
-            list : listCopy　 //state:list[]に、state:taskの中身を追加
+            list : listCopy　 //state:list[]に、listCopyの中身を追加
         })
     }
 
     render(){
+        const items = [];
+        for(let i = 0;i < this.state.list.length;i++){
+            items.push(<li>{this.state.list[i]}</li>);
+        }
+        
         return(
             <div>
-               <input type="text" onChange={this.handleTextChange} />
-               <button onClick={this.handleClick}></button>
+               <input type="text" onChange={this.handleTextChange} placeholder="ここにタスクを入力"/>
+               <button onClick={this.handleClick}>タスク追加</button>
+                <ul>
+                    {items}    
+                </ul>
             </div>
         );
     }
