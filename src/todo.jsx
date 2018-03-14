@@ -7,19 +7,20 @@ class ToDo extends React.Component{
         //stateの初期状態を設定
         this.state ={
             list:[],
-            task: ''
+            task: '',
+            key: false
         }
 
-        this.handleTextChange = this.handleTextChange.bind(this);
-        this.handleClick = this.handleClick.bind(this);
+        // this.handleTextChange = this.handleTextChange.bind(this);
+        // this.handleClick = this.handleClick.bind(this);
     }
 
     // テキストボックスの変更をハンドル
-    handleTextChange(e){
+    handleTextChange(e){    
         this.setState({
             //state:taskをテキストボックスの内容で書き換え
             task : e.target.value
-        });
+        });    
     }
 
     //ボタンのクリックをハンドル
@@ -37,18 +38,32 @@ class ToDo extends React.Component{
     render(){
         const items = [];
         for(let i = 0;i < this.state.list.length;i++){
-            items.push(<li>{this.state.list[i]}</li>);
+            items.push(
+                <li>
+                    {this.state.list[i]}
+                </li>
+            );
         }
         
         return(
-            <div>
-               <input type="text" onChange={this.handleTextChange} placeholder="ここにタスクを入力"/>
-               <button onClick={this.handleClick}>タスク追加</button>
+            <div className="Form">
+                <InputForm onHandleTextChange={this.handleTextChange.bind(this)} onHandleClick={this.handleClick.bind(this)} />
                 <ul>
-                    {items}    
+                    {items}
                 </ul>
+            </div> 
+        )
+    }
+}
+
+export class InputForm extends React.Component{
+    render(){
+        return(
+            <div>
+               <input type="text" onChange={this.props.onHandleTextChange} placeholder="ここにタスクを入力" refs="taskName"/>
+               <button onClick={this.props.onHandleClick}>タスク追加</button>
             </div>
-        );
+        )
     }
 }
 
