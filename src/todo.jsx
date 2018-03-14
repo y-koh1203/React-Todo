@@ -8,11 +8,10 @@ class ToDo extends React.Component{
         this.state ={
             list:[],
             task: '',
-            key: false
+            finish: false       
         }
 
-        // this.handleTextChange = this.handleTextChange.bind(this);
-        // this.handleClick = this.handleClick.bind(this);
+        this.deleteTask = this.deleteTask.bind(this);
     }
 
     // テキストボックスの変更をハンドル
@@ -24,38 +23,73 @@ class ToDo extends React.Component{
     }
 
     //ボタンのクリックをハンドル
-    handleClick(){
-        //state:list[]のコピーを作成
-        var listCopy = this.state.list;
+    handleClick(e){
+        e.preventDefault();
+        //list[]のコピーを作成
+        var copyList = this.state.list;
+        
+        //listに追加する連想配列
+        var hashList = [];
+        hashList['task'] = this.state.task;
+        hashList['finish'] = this.state.finish;
+        
+        //作成した連想配列をlistに追加
+        copyList.push(hashList);
 
-        //コピー配列にstate:taskを追加
-        listCopy.push(this.state.task);
         this.setState({
-            list : listCopy　 //state:list[]に、listCopyの中身を追加
+            list : copyList　 //list[]に、listの中身を追加
         })
     }
 
-    render(){
-        const items = [];
-        for(let i = 0;i < this.state.list.length;i++){
-            items.push(
-                <li>
-                    {this.state.list[i]}
-                </li>
-            );
+    //タスクの状態を変更する関数
+    onChangeCheckBox(e){
+        var key = e.target.value;
+        var copyList = this.state.list;
+
+        if(copyList[key].finish === false){
+            copyList[key].finish = true;
+        }else{
+            copyList[key].finish = false;
         }
-        
+
+        console.log(copyList);
+    
+        this.setState({
+            list: copyList
+        })
+    }  
+
+    //タスクの削除を行う関数
+    deleteTask(e){
+        e.preventDefault();
+        var copyList = this.state.list;
+        var len = copyList.length;
+
+        for(let i = 0;i < len;i++){
+            if(copyList[i].finish == true){
+                copyList.splice(i,1);
+            }else{
+                i+1;
+            }
+        }
+
+        this.setState({
+            list: copyList
+        })
+    }
+
+    render(){        
         return(
             <div className="Form">
                 <InputForm onHandleTextChange={this.handleTextChange.bind(this)} onHandleClick={this.handleClick.bind(this)} />
-                <ul>
-                    {items}
-                </ul>
+                <TaskList list={this.state.list} onChangeCheckBox={this.onChangeCheckBox.bind(this)}/>
+                <button onClick={this.deleteTask}>選択したタスクを完了</button>
             </div> 
         )
     }
 }
 
+// 入力フォーム
 export class InputForm extends React.Component{
     render(){
         return(
@@ -63,6 +97,29 @@ export class InputForm extends React.Component{
                <input type="text" onChange={this.props.onHandleTextChange} placeholder="ここにタスクを入力" refs="taskName"/>
                <button onClick={this.props.onHandleClick}>タスク追加</button>
             </div>
+        )
+    }
+}
+
+//タスク一覧の表示
+export class TaskList extends React.Component{
+    render(){
+        const items = [];
+        if(0 < this.props.list.length){
+            for(let i = 0;i < this.props.list.length;i++){
+                items.push(
+                    <li>
+                        {this.props.list[i].task}
+                        <input type="checkbox" name="" id="" value={i} onChange={this.props.onChangeCheckBox.bind(this)} />
+                    </li>
+                );
+            }
+        }
+             
+        return(
+            <ul>
+                {items}
+            </ul>         
         )
     }
 }
