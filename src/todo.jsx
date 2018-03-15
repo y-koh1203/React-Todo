@@ -1,6 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
+import {InputForm} from './Input.jsx';
+import {TaskList} from './TaskList.jsx';
+
 class ToDo extends React.Component{
     constructor(){
         super();
@@ -22,7 +25,7 @@ class ToDo extends React.Component{
         });    
     }
 
-    //ボタンのクリックをハンドル
+    // ボタンのクリックをハンドル
     handleClick(e){
         e.preventDefault();
         //list[]のコピーを作成
@@ -97,44 +100,7 @@ class ToDo extends React.Component{
     }
 }
 
-// 入力フォーム
-export class InputForm extends React.Component{
-    render(){
-        return(
-            <div>
-               <input type="text" onChange={this.props.onHandleTextChange} placeholder="ここにタスクを入力" refs="taskName"/>
-               <button onClick={this.props.onHandleClick}>タスク追加</button>
-            </div>
-        )
-    }
-}
-
-//タスク一覧の表示
-export class TaskList extends React.Component{
-    render(){
-        const items = [];
-        if(0 < this.props.list.length){
-            for(let i = 0;i < this.props.list.length;i++){
-                items.push(
-                    <li>
-                        {this.props.list[i].task}
-                        <input type="checkbox" name="checkboxes" value={i} onChange={this.props.onChangeCheckBox.bind(this)} />
-                    </li>
-                );
-            }
-        }
-             
-        return(
-            <ul>
-                {items}
-            </ul>         
-        )
-    }
-}
-
 ReactDOM.render(
     <ToDo />,
     document.getElementById('root')
 )
-
-    

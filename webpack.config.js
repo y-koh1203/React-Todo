@@ -3,7 +3,11 @@ const path = require('path');
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   entry: {
-    todo : './Todo.jsx'
+    todo : [
+      './Todo.jsx',
+      './Input.jsx',
+      './TaskList.jsx'
+    ]
   },
   output: {
     path: __dirname + "/dest/",
