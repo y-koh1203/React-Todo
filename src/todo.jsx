@@ -51,8 +51,6 @@ class ToDo extends React.Component{
         }else{
             copyList[key].finish = false;
         }
-
-        console.log(copyList);
     
         this.setState({
             list: copyList
@@ -65,14 +63,24 @@ class ToDo extends React.Component{
         var copyList = this.state.list;
         var len = copyList.length;
 
-        for(let i = 0;i < len;i++){
-            if(copyList[i].finish == true){
-                copyList.splice(i,1);
+        //タスク完了の判定
+        while(len--){
+            if(copyList[len].finish == true){
+                copyList.splice(len,1);
             }else{
-                i+1;
-            }
+                //タスクの状態をリセット
+                copyList[len].finish = false;
+            } 
         }
 
+        //チェックボックスの初期化処理
+        var cb = document.querySelectorAll('[name="checkboxes"]');
+        var len = cb.length;
+
+        for(var i = 0; i < len; i++){
+            cb[i].checked = false;
+        }
+    
         this.setState({
             list: copyList
         })
@@ -110,7 +118,7 @@ export class TaskList extends React.Component{
                 items.push(
                     <li>
                         {this.props.list[i].task}
-                        <input type="checkbox" name="" id="" value={i} onChange={this.props.onChangeCheckBox.bind(this)} />
+                        <input type="checkbox" name="checkboxes" value={i} onChange={this.props.onChangeCheckBox.bind(this)} />
                     </li>
                 );
             }
