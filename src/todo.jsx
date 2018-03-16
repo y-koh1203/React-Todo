@@ -1,8 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import {InputForm} from './Input.jsx';
-import {TaskList} from './TaskList.jsx';
+import { InputForm } from './Input.jsx';
+import { TaskList } from './TaskList.jsx';
+import { EditTask } from "./EditTask.jsx";
 
 class ToDo extends React.Component{
     constructor(){
@@ -28,6 +29,7 @@ class ToDo extends React.Component{
     // ボタンのクリックをハンドル
     handleClick(e){
         e.preventDefault();
+
         //list[]のコピーを作成
         var copyList = this.state.list;
         
@@ -36,19 +38,21 @@ class ToDo extends React.Component{
         hashList['task'] = this.state.task;
         hashList['finish'] = this.state.finish;
         
-        //作成した連想配列をlistに追加
+        //作成した連想配列をcopyListに追加
         copyList.push(hashList);
 
         this.setState({
-            list : copyList　 //list[]に、listの中身を追加
+            list : copyList　 
         })
     }
 
     //タスクの状態を変更する関数
     onChangeCheckBox(e){
+        //選択されたチェックボックスのvalueを取得
         var key = e.target.value;
         var copyList = this.state.list;
 
+        //keyを元に該当するインデックスのfinishを変更
         if(copyList[key].finish === false){
             copyList[key].finish = true;
         }else{
@@ -80,7 +84,7 @@ class ToDo extends React.Component{
         var cb = document.querySelectorAll('[name="checkboxes"]');
         var len = cb.length;
 
-        for(var i = 0; i < len; i++){
+        for(let i = 0; i < len; i++){
             cb[i].checked = false;
         }
     
@@ -89,12 +93,41 @@ class ToDo extends React.Component{
         })
     }
 
+    //タスクの編集を行う関数
+    editTask(e){
+
+        //変更したテキストと、変更したいlistのインデックスを取得
+        var val = document.getElementById('text_box').value;
+        var index = e.target.value;
+
+        if(index == null || index == ""){
+            alert('タスクが未選択です');
+            return false;
+        }
+
+        if(val == null || val == ""){
+            alert('タスクが未入力です');
+            return false;
+        }
+
+        var listCopy = this.state.list;
+
+        // 該当するインデックスの値のみ書き換え
+        listCopy[index].task = val;
+        
+        this.setState({
+            list: listCopy
+        })
+    }
+
     render(){        
         return(
             <div className="Form">
                 <InputForm onHandleTextChange={this.handleTextChange.bind(this)} onHandleClick={this.handleClick.bind(this)} />
-                <TaskList list={this.state.list} onChangeCheckBox={this.onChangeCheckBox.bind(this)}/>
+                <TaskList list={this.state.list} onChangeCheckBox={this.onChangeCheckBox.bind(this)} 
+                    onEditTask={this.editTask.bind(this)}/>
                 <button onClick={this.deleteTask}>選択したタスクを完了</button>
+                <EditTask list={this.state.list} onEditTask={this.editTask.bind(this)} />
             </div> 
         )
     }

@@ -6,7 +6,8 @@ module.exports = {
     todo : [
       './Todo.jsx',
       './Input.jsx',
-      './TaskList.jsx'
+      './TaskList.jsx',
+      './EditTask.jsx'
     ]
   },
   output: {

@@ -9,7 +9,7 @@ export class TaskList extends React.Component{
             for(let i = 0;i < this.props.list.length;i++){
                 items.push(
                     <li>
-                        {this.props.list[i].task}
+                        <span>{this.props.list[i].task}</span>
                         <input type="checkbox" name="checkboxes" value={i} onChange={this.props.onChangeCheckBox.bind(this)} />
                     </li>
                 );
@@ -17,9 +17,9 @@ export class TaskList extends React.Component{
         }
              
         return(
-            <ul>
+            <ol>
                 {items}
-            </ul>         
+            </ol>         
         )
     }
 }
